@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planner de Estudos — Estude com foco, revisão e constância</title>
+  <meta name="description" content="Chega de estudar no improviso: o Planner de Estudos organiza sua rotina, controla revisões e mostra seu progresso semana a semana." />
+  <meta property="og:title" content="Planner de Estudos — Estude com foco, revisão e constância" />
+  <meta property="og:description" content="Chega de estudar no improviso: rotina organizada, revisão espaçada e progresso visível semana a semana." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="hero-planner.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(0.972 0.014 88);
+      --paper-soft: oklch(0.945 0.018 86);
+      --paper-card: oklch(0.995 0.006 95);
+      --ink: oklch(0.26 0.045 255);
+      --ink-soft: oklch(0.48 0.04 255);
+      --brand: oklch(0.7 0.16 55);
+      --brand-deep: oklch(0.55 0.14 45);
+      --brand-soft: oklch(0.93 0.05 70);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Work Sans", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+    .font-display { font-family: "Fraunces", Georgia, serif; }
+    .icon { width: 1em; height: 1em; }
+
+    /* ---------- Top bar ---------- */
+    .topbar {
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.015em;
+      padding: 0.625rem 1rem;
+    }
+    .topbar strong { color: var(--brand-soft); font-weight: 600; }
+
+    /* ---------- Header ---------- */
+    .header {
+      position: sticky; top: 0; z-index: 40;
+      background: color-mix(in srgb, var(--paper) 90%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 0;
+    }
+    .logo { display: flex; align-items: center; gap: 0.625rem; font-weight: 600; font-size: 1.125rem; }
+    .logo-badge {
+      width: 2.25rem; height: 2.25rem; border-radius: 0.75rem;
+      background: var(--brand); color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .logo-badge svg { width: 1.25rem; height: 1.25rem; }
+    .logo span { font-family: "Fraunces", Georgia, serif; letter-spacing: -0.01em; }
+    .nav { display: none; gap: 2rem; font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
+    .nav a:hover { color: var(--ink); }
+    .btn-header {
+      border-radius: 9999px; background: var(--ink); color: var(--paper);
+      padding: 0.625rem 1.25rem; font-size: 0.875rem; font-weight: 600;
+      transition: background .2s, color .2s;
+    }
+    .btn-header:hover { background: var(--brand-deep); }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      border-radius: 9999px; font-weight: 600; text-align: center;
+      transition: transform .2s, background .2s, color .2s, border-color .2s;
+ed;
+    }
+    .btn-primary {
+      background: var(--brand); color: var(--ink);
+      padding: 1rem 2rem; font-size: 1rem;
+      box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--brand-deep) 60%, transparent);
+    }
+    .btn-primary:hover { transform: translateY(-2px); background: var(--brand-deep); color: var(--paper); }
+    .btn-outline {
+      border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+      padding: 1rem 2rem; font-size: 1rem;
+    }
+    .btn-outline:hover { border-color: color-mix(in srgb, var(--ink) 50%, transparent); }
+    .btn-lg { padding: 1.25rem 2.5rem; font-size: 1.125rem; }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; overflow: hidden; }
+    .hero-glow {
+      position: absolute; top: -8rem; right: -10%;
+      width: 30rem; height: 30rem; border-radius: 50%;
+      background: var(--brand-soft); opacity: .6; filter: blur(64px);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: relative;
+      display: grid; gap: 3.5rem; align-items: center;
+      padding: 3.5rem 0 5rem;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
+      background: var(--brand-soft); color: var(--brand-deep);
+      border-radius: 9999px; padding: 0.375rem 1rem;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .badge svg { width: 0.875rem; height: 0.875rem; }
+    .hero h1 {
+      margin-top: 1.5rem;
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 600; font-size: 2.5rem; line-height: 1.12; letter-spacing: -0.02em;
+    }
+    .hero h1 .accent { color: var(--brand-deep); }
+    .hero-sub { margin-top: 1.5rem; max-width: 36rem; font-size: 1.125rem; line-height: 1.625; color: var(--ink-soft); }
+    .hero-actions { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .hero-social { margin-top: 2rem; display: flex; align-items: center; gap: 1rem; }
+    .stars { display: flex; gap: 2px; color: var(--brand); }
+    .stars svg { width: 1rem; height: 1rem; fill: var(--brand); }
+    .hero-social p { font-size: 0.875rem; color: var(--ink-soft); }
+    .hero-social strong { color: var(--ink); }
+    .hero-media { position: relative; }
+    .hero-media img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 1.5rem;
+      border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--ink) 40%, transparent);
+    }
+    .float-card {
+      position: absolute; display: none; align-items: center; gap: 0.75rem;
+      background: var(--paper-card); border-radius: 1rem;
+      border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      padding: 1rem 1.25rem; box-shadow: 0 10px 25px -10px rgb(0 0 0 / .2);
+    }
+    .float-card .fc-icon {
+      width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+      background: var(--brand-soft); color: var(--brand-deep);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .float-card .fc-icon svg { width: 1.25rem; height: 1.25rem; }
+    .float-card p { font-size: 0.875rem; font-weight: 600; }
+    .float-card small { font-size: 0.75rem; color: var(--ink-soft); }
+    .float-card.left { bottom: -1.25rem; left: -1.25rem; }
+    .float-card.right { top: -1.25rem; right: -1rem; }
+
+    /* ---------- Trust strip ---------- */
+    .trust {
+      border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      background: var(--paper-soft);
+    }
+    .trust-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: 2rem 0; }
+    .trust-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; font-weight: 500; }
+    .trust-item svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; color: var(--brand-deep); }
+
+    /* ---------- Sections ---------- */
+    .section { padding: 5rem 0; }
+    .section-head { max-width: 42rem; margin: 0 auto; text-align: center; }
+    .eyebrow {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--brand-deep);
+    }
+    .section-head h2 {
+      margin-top: 0.75rem;
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 600; font-size: 1.875rem; letter-spacing: -0.02em;
+    }
+    .grid-3 { margin-top: 3rem; display: grid; gap: 1.5rem; }
+
+    /* ---------- Pain ---------- */
+    .pain-card {
+      background: var(--paper-card);
+      border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      border-radius: 1.5rem; padding: 1.75rem;
+    }
+    .pain-card h3 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; }
+    .pain-card p { margin-top: 0.75rem; line-height: 1.625; color: var(--ink-soft); }
+    .pain-close {
+      margin: 2.5rem auto 0; max-width: 42rem; text-align: center;
+      font-size: 1.125rem; font-weight: 500;
+    }
+
+    /* ---------- How it works (dark) ---------- */
+    .dark-band {
+      background: var(--ink); color: var(--paper);
+      border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    }
+    .dark-band .eyebrow { color: var(--brand-soft); }
+    .dark-band .section-head h2 { color: var(--paper); }
+    .step-card {
+      border: 1px solid color-mix(in srgb, var(--paper) 15%, transparent);
+      background: color-mix(in srgb, var(--paper) 5%, transparent);
+      border-radius: 1.5rem; padding: 1.75rem;
+    }
+    .step-icon {
+      width: 3rem; height: 3rem; border-radius: 1rem;
+      background: var(--brand); color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-icon svg { width: 1.5rem; height: 1.5rem; }
+    .step-label {
+      margin-top: 1.25rem; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand-soft);
+    }
+    .step-card h3 { margin-top: 0.5rem; font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; }
+    .step-card p { margin-top: 0.75rem; line-height: 1.625; color: color-mix(in srgb, var(--paper) 70%, transparent); }
+
+    /* ---------- What's inside ---------- */
+    .inside-item {
+      display: flex; gap: 1rem;
+      background: var(--paper-card);
+      border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      border-radius: 1.5rem; padding: 1.5rem;
+      transition: box-shadow .2s;
+    }
+    .inside-item:hover { box-shadow: 0 16px 40px -24px color-mix(in srgb, var(--ink) 40%, transparent); }
+    .inside-item svg { width: 1.5rem; height: 1.5rem; flex-shrink: 0; margin-top: 2px; color: var(--brand-deep); }
+    .inside-item h3 { font-weight: 600; }
+    .inside-item p { margin-top: 0.375rem; font-size: 0.875rem; line-height: 1.625; color: var(--ink-soft); }
+
+    /* ---------- Testimonials ---------- */
+    .testimonials { background: var(--paper-soft); }
+    .quote-card {
+      display: flex; flex-direction: column;
+      background: var(--paper-card);
+      border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      border-radius: 1.5rem; padding: 1.75rem;
+    }
+    .quote-card .q-icon { color: var(--brand); }
+    .quote-card .q-icon svg { width: 1.75rem; height: 1.75rem; }
+    .quote-card blockquote { margin-top: 1rem; flex: 1; line-height: 1.625; color: var(--ink-soft); }
+    .quote-card figcaption { margin-top: 1.5rem; }
+    .quote-card figcaption p { font-weight: 600; }
+    .quote-card figcaption small { font-size: 0.875rem; color: var(--ink-soft); }
+
+    /* ---------- Offer ---------- */
+    .offer-card {
+      border: 2px solid color-mix(in srgb, var(--brand) 50%, transparent);
+      background: var(--paper-card);
+      border-radius: 2.5rem;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 40px 80px -40px color-mix(in srgb, var(--brand-deep) 50%, transparent);
+      text-align: center;
+    }
+    .offer-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--brand-soft); color: var(--brand-deep);
+      border-radius: 9999px; padding: 0.375rem 1rem;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .offer-card h2 {
+      margin-top: 1.25rem;
+      font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.875rem; letter-spacing: -0.02em;
+    }
+    .offer-price { margin-top: 1.5rem; display: flex; align-items: flex-end; justify-content: center; gap: 0.75rem; }
+    .offer-price .old { font-size: 1.25rem; color: var(--ink-soft); text-decoration: line-through; }
+    .offer-price .new { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 3.75rem; letter-spacing: -0.02em; line-height: 1; }
+    .offer-price .note { padding-bottom: 0.5rem; font-size: 0.875rem; color: var(--ink-soft); }
+    .offer-note { margin-top: 0.5rem; font-size: 0.875rem; color: var(--ink-soft); }
+    .offer-list { list-style: none; max-width: 28rem; margin: 2rem auto 0; text-align: left; }
+    .offer-list li { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .offer-list li + li { margin-top: 0.75rem; }
+    .offer-list svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; margin-top: 2px; color: var(--brand-deep); }
+    .offer-list span { font-size: 0.875rem; font-weight: 500; }
+    .offer-cta { margin-top: 2.5rem; }
+    .offer-cta .btn { width: 100%; padding: 1.25rem 2rem; font-size: 1.125rem; }
+    .guarantee {
+      margin-top: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-size: 0.875rem; color: var(--ink-soft);
+    }
+    .guarantee svg { width: 1rem; height: 1rem; color: var(--brand-deep); }
+
+    /* ---------- FAQ ---------- */
+    .faq { background: var(--paper-soft); border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+    .faq-item {
+      background: var(--paper-card);
+      border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+      border-radius: 1rem; padding: 1.25rem 1.5rem;
+    }
+    .faq-item + .faq-item { margin-top: 1rem; }
+    .faq-item summary {
+      list-style: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      font-weight: 600;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; color: var(--ink-soft); transition: transform .2s; }
+    .faq-item[open] summary svg { transform: rotate(180deg); }
+    .faq-item p { margin-top: 0.75rem; line-height: 1.625; color: var(--ink-soft); }
+
+    /* ---------- Final CTA + Footer ---------- */
+    .final-cta { background: var(--ink); color: var(--paper); }
+    .final-cta-inner { max-width: 56rem; margin: 0 auto; padding: 6rem 1.5rem; text-align: center; }
+    .final-cta .icon-lg { color: var(--brand); width: 2.5rem; height: 2.5rem; }
+    .final-cta h2 {
+      margin-top: 1.5rem;
+      font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 2rem; letter-spacing: -0.02em;
+    }
+    .final-cta p { margin: 1.25rem auto 0; max-width: 36rem; font-size: 1.125rem; color: color-mix(in srgb, var(--paper) 70%, transparent); }
+    .final-cta .btn { margin-top: 2.5rem; }
+    footer { background: var(--ink); color: color-mix(in srgb, var(--paper) 50%, transparent); border-top: 1px solid color-mix(in srgb, var(--paper) 15%, transparent); text-align: center; padding: 2.5rem 1.5rem; font-size: 0.875rem; }
+    footer .footer-brand { font-family: "Fraunces", Georgia, serif; font-size: 1rem; font-weight: 600; color: var(--paper); }
+    footer p:last-child { margin-top: 0.75rem; }
+
+    /* ---------- Responsive ---------- */
+    @media (min-width: 640px) {
+      .hero h1 { font-size: 3rem; }
+      .section-head h2, .offer-card h2 { font-size: 2.25rem; }
+      .hero-actions { flex-direction: row; align-items: center; }
+      .offer-card { padding: 3rem; }
+      .offer-cta .btn { width: auto; }
+      .float-card { display: flex; }
+      .final-cta h2 { font-size: 3rem; }
+    }
+    @media (min-width: 768px) {
+      .nav { display: flex; }
+      .trust-grid { grid-template-columns: repeat(4, 1fr); }
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+      .grid-2-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-2-3 .inside-item:nth-child(5), .grid-2-3 .inside-item:nth-child(6) { grid-column: auto; }
+    }
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: 1.05fr 1fr; padding-top: 5rem; }
+      .hero h1 { font-size: 3.75rem; }
+      .grid-2-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de oferta -->
+  <div class="topbar">
+    Oferta de lançamento: <strong>60% de desconto + 3 bônus</strong> por tempo limitado
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#top" class="logo">
+        <span class="logo-badge"><i data-lucide="calendar-range"></i></span>
+        <span>Planner de Estudos</span>
+      </a>
+      <nav class="nav">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#dentro">O que vem</a>
+        <a href="#depoimentos">Depoimentos</a>
+        <a href="#faq">Dúvidas</a>
+      </nav>
+      <a href="https://pay.cakto.com.br/3fqhoty_1122335" target="_blank" rel="noopener noreferrer" class="btn-header">Quero o meu</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="top" class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div>
+          <span class="badge"><i data-lucide="zap"></i> Método + planner em um só lugar</span>
+          <h1>Estude menos horas.<br /><span class="accent">Aprenda muito mais.</span></h1>
+          <p class="hero-sub">O Planner de Estudos organiza sua rotina em 10 minutos por semana: metas claras, revisão espaçada automática e um registro do seu progresso que mantém a motivação em alta.</p>
+          <div class="hero-actions">
+            <a href="https://pay.cakto.com.br/3fqhoty_1122335" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Quero meu planner agora</a>
+            <a href="#dentro" class="btn btn-outline">Ver o que vem dentro</a>
+          </div>
+          <div class="hero-social">
+            <div class="stars">
+              <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+            </div>
+            <p><strong>4,9 de 5</strong> · mais de 2.400 estudantes organizados</p>
+          </div>
+        </div>
+        <div class="hero-media">
+          <img src="hero-planner.jpg" alt="Planner de estudos aberto mostrando a semana planejada" width="1320" height="880" />
+          <div class="float-card left">
+            <span class="fc-icon"><i data-lucide="repeat-2"></i></span>
+            <div>
+              <p>Revisão espaçada</p>
+              <small>Lembra você do que revisar</small>
+            </div>
+          </div>
+          <div class="float-card right">
+            <span class="fc-icon"><i data-lucide="trending-up"></i></span>
+            <div>
+              <p>Progresso visível</p>
+              <small>Semana após semana</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Faixa de confiança -->
+    <section class="trust">
+      <div class="container trust-grid">
+        <div class="trust-item"><i data-lucide="target"></i><span>Metas semanais realistas</span></div>
+        <div class="trust-item"><i data-lucide="alarm-clock"></i><span>Blocos de foco que funcionam</span></div>
+        <div class="trust-item"><i data-lucide="repeat-2"></i><span>Revisão espaçada guiada</span></div>
+        <div class="trust-item"><i data-lucide="heart"></i><span>Espaço para descanso e lazer</span></div>
+      </div>
+    </section>
+
+    <!-- Dores -->
+    <section class="section container">
+      <div class="section-head">
+        <p class="eyebrow">Se isso parece familiar</p>
+        <h2>O problema não é você. É a falta de um sistema.</h2>
+      </div>
+      <div class="grid-3">
+        <div class="pain-card">
+          <h3>Estuda muito e retém pouco</h3>
+          <p>Você passa horas na mesa, mas na prova a memória simplesmente não vem — porque nunca houve um ciclo de revisão.</p>
+        </div>
+        <div class="pain-card">
+          <h3>Começa empolgado, desiste em 1 semana</h3>
+          <p>Sem um plano simples de seguir, a motivação acaba na segunda-feira e a culpa toma o resto da semana.</p>
+        </div>
+        <div class="pain-card">
+          <h3>Agenda lotada e sensação de atraso</h3>
+          <p>Matérias acumulam, provas chegam juntas e o estudo vira brigas com o relógio em vez de um hábito tranquilo.</p>
+        </div>
+      </div>
+      <p class="pain-close">O Planner de Estudos resolve isso com um método simples, no papel ou no tablet — sem apps complicados e sem gastar horas planejando.</p>
+    </section>
+
+    <!-- Como funciona -->
+    <section id="como-funciona" class="dark-band">
+      <div class="container section">
+        <div class="section-head">
+          <p class="eyebrow">Como funciona</p>
+          <h2>Três passos. Todo domingo. Só isso.</h2>
+        </div>
+        <div class="grid-3">
+          <div class="step-card">
+            <span class="step-icon"><i data-lucide="calendar-range"></i></span>
+            <p class="step-label">Passo 1</p>
+            <h3>Planeje a semana em 10 minutos</h3>
+            <p>Use o mapa semanal para distribuir matérias em blocos curtos e realistas, respeitando trabalho, aula e descanso.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-icon"><i data-lucide="book-open-check"></i></span>
+            <p class="step-label">Passo 2</p>
+            <h3>Estude com blocos de foco</h3>
+            <p>Cada sessão tem objetivo definido (ler, resolver, resumir). Marque o que concluiu e sinta o efeito de ver o progresso acumular.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-icon"><i data-lucide="brain-circuit"></i></span>
+            <p class="step-label">Passo 3</p>
+            <h3>Deixe o planner revisar por você</h3>
+            <p>O sistema de revisão espaçada reagenda automaticamente os tópicos nos dias certos, antes de você esquecer — é assim que o conteúdo fixa.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- O que vem dentro -->
+    <section id="dentro" class="section container">
+      <div class="section-head">
+        <p class="eyebrow">Tudo que vem dentro</p>
+        <h2>Não é só uma agenda. É um sistema completo.</h2>
+      </div>
+      <div class="grid-3 grid-2-3">
+        <div class="inside-item">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Planner semanal e mensal</h3>
+            <p>Mapa da semana com blocos de estudo, metas por matéria e espaço para provas e entregas.</p>
+          </div>
+        </div>
+        <div class="inside-item">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Sistema de revisão espaçada</h3>
+            <p>Tabelas prontas que reagendam cada tópico nos intervalos ideais: 1 dia, 7 dias e 30 dias.</p>
+          </div>
+        </div>
+        <div class="inside-item">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Rastreador de hábitos</h3>
+            <p>Acompanhe constância, sono, hidratação e os hábitos que sustentam o estudo — não só o estudo.</p>
+          </div>
+        </div>
+        <div class="inside-item">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Diário de progresso</h3>
+            <p>Registro rápido de humor e desempenho para enxergar a evolução e ajustar a rota sem culpa.</p>
+          </div>
+        </div>
+        <div class="inside-item">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Guia do método</h3>
+            <p>Um passo a passo curto de como usar cada página, com exemplos reais de rotina de vestibulando e concurseiro.</p>
+          </div>
+        </div>
+        <div class="inside-item">
+          <i data-lucide="check-circle-2"></i>
+          <div>
+            <h3>Bônus de lançamento</h3>
+            <p>Kit de fundos para tablet (GoodNotes e afins), versão A4 e A5 para imprimir e checklist de véspera de prova.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section id="depoimentos" class="testimonials">
+      <div class="container section">
+        <div class="section-head">
+          <p class="eyebrow">Quem já usa</p>
+          <h2>Rotinas reais, resultados reais</h2>
+        </div>
+        <div class="grid-3">
+          <figure class="quote-card">
+            <span class="q-icon"><i data-lucide="quote"></i></span>
+            <blockquote>“Eu vivia começando de novo toda semana. Com o mapa semanal, finalmente fiz um mês inteiro de estudo sem faltar um dia.”</blockquote>
+            <figcaption>
+              <p>Marina L.</p>
+              <small>Vestibulanda — Medicina</small>
+            </figcaption>
+          </figure>
+          <figure class="quote-card">
+            <span class="q-icon"><i data-lucide="quote"></i></span>
+            <blockquote>“A revisão espaçada foi o divisor de águas. Parei de esquecer conteúdo antigo e minhas notas subiram em duas provas.”</blockquote>
+            <figcaption>
+              <p>Rafael T.</p>
+              <small>Estudante de Engenharia</small>
+            </figcaption>
+          </figure>
+          <figure class="quote-card">
+            <span class="q-icon"><i data-lucide="quote"></i></span>
+            <blockquote>“Estudo e trabalho em tempo integral. O planner me mostrou que eu precisava de menos horas, mas com foco de verdade.”</blockquote>
+            <figcaption>
+              <p>Camila S.</p>
+              <small>Concurseira</small>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Oferta -->
+    <section id="oferta" class="container" style="max-width: 48rem;">
+      <div class="section">
+        <div class="offer-card">
+          <span class="offer-tag">Oferta de lançamento</span>
+          <h2>Comece hoje a estudar com direção</h2>
+          <div class="offer-price">
+            <span class="old">R$ 67</span>
+            <span class="new">R$ 17,90</span>
+            <span class="note">pagamento único</span>
+          </div>
+          <p class="offer-note">Acesso imediato · Atualizações vitalícias · Sem mensalidade</p>
+          <ul class="offer-list">
+            <li><i data-lucide="check-circle-2"></i><span>Planner semanal, mensal e anual</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Sistema completo de revisão espaçada</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Rastreador de hábitos e diário de progresso</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Guia do método passo a passo</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Bônus: versões A4/A5 + fundos para tablet</span></li>
+            <li><i data-lucide="check-circle-2"></i><span>Atualizações gratuitas para sempre</span></li>
+          </ul>
+          <div class="offer-cta">
+            <a href="https://pay.cakto.com.br/3fqhoty_1122335" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Quero meu planner por R$ 17,90</a>
+            <div class="guarantee">
+              <i data-lucide="shield-check"></i>
+              Garantia incondicional de 7 dias — não gostou, devolvemos tudo.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+      <div class="container section" style="max-width: 48rem;">
+        <div class="section-head">
+          <p class="eyebrow">Dúvidas frequentes</p>
+          <h2>Antes de comprar, saiba tudo</h2>
+        </div>
+        <div style="margin-top: 2.5rem;">
+          <details class="faq-item">
+            <summary>É digital ou impresso?<i data-lucide="chevron-down"></i></summary>
+            <p>Os dois. Você recebe os arquivos para usar no tablet (GoodNotes, Notability e afins) e as versões A4 e A5 prontas para imprimir quantas vezes quiser.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Serve para o meu tipo de estudo?<i data-lucide="chevron-down"></i></summary>
+            <p>Sim. O método funciona para vestibular, concurso, faculdade, idiomas ou certificações — o planner é flexível para qualquer matéria e carga horária.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Quanto tempo por dia eu vou gastar planejando?<i data-lucide="chevron-down"></i></summary>
+            <p>Cerca de 10 minutos no domingo para montar a semana e 1 minuto por dia para marcar o que concluiu. O objetivo é justamente eliminar o excesso de planejamento.</p>
+          </details>
+          <details class="faq-item">
+            <summary>E se eu não gostar?<i data-lucide="chevron-down"></i></summary>
+            <p>Você tem 7 dias de garantia incondicional. Basta enviar um e-mail e devolvemos 100% do valor, sem perguntas.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Por quanto tempo tenho acesso?<i data-lucide="chevron-down"></i></summary>
+            <p>Para sempre. O acesso é vitalício e todas as atualizações futuras do planner entram automaticamente sem custo adicional.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="final-cta">
+      <div class="final-cta-inner">
+        <i data-lucide="file-text" class="icon-lg"></i>
+        <h2>Sua próxima semana pode ser diferente.</h2>
+        <p>Dez minutos de planejamento hoje valem mais do que dez horas de estudo sem direção. Comece agora com 60% de desconto.</p>
+        <a href="https://pay.cakto.com.br/3fqhoty_1122335" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">Quero estudar com foco</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-brand">Planner de Estudos</p>
+    <p>© 2026 Planner de Estudos. Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
